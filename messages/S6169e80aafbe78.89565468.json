@@ -1,0 +1,14 @@
+{
+    "data": [
+        {
+            "message": "Hey",
+            "username": "Lars",
+            "datetime": 1660317927
+        },
+        {
+            "message": "Test",
+            "username": "Lars",
+            "datetime": 1661092702
+        }
+    ]
+}

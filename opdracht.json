@@ -1,0 +1,45 @@
+{
+    "laatste_update": 1661342909.7909606,
+    "data": [
+        {
+            "ID": 72,
+            "titel": "Tekenfilm Toetje",
+            "datum": "2021-10-16 23:00:00",
+            "lastupdate": "2021-10-16 21:53:14",
+            "eindtijd": "2021-10-16 23:59:00",
+            "maxpunten": 10
+        },
+        {
+            "ID": 70,
+            "titel": "MINI moppentrommel",
+            "datum": "2021-10-16 22:00:00",
+            "lastupdate": "2021-10-16 21:42:53",
+            "eindtijd": "2021-10-16 22:30:00",
+            "maxpunten": 5
+        },
+        {
+            "ID": 56,
+            "titel": "Battle of de blikjes",
+            "datum": "2021-10-16 21:00:00",
+            "lastupdate": "2021-10-16 22:44:43",
+            "eindtijd": "2021-10-16 22:55:00",
+            "maxpunten": 8
+        },
+        {
+            "ID": 46,
+            "titel": "Medisch Centrum AAAAAA",
+            "datum": "2021-10-16 20:13:00",
+            "lastupdate": "2021-10-16 16:08:15",
+            "eindtijd": "2021-10-16 21:30:00",
+            "maxpunten": 5
+        },
+        {
+            "ID": 52,
+            "titel": "TOUPE COUPE",
+            "datum": "2021-10-16 19:00:00",
+            "lastupdate": "2021-10-16 19:44:32",
+            "eindtijd": "2021-10-16 20:00:00",
+            "maxpunten": 5
+        }
+    ]
+}
