@@ -4,6 +4,7 @@ import json
 import time
 import requests
 import os
+import joticom_db as db
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
@@ -45,46 +46,23 @@ def scorelijst(): return flask.jsonify(getEndpointData('scorelijst'))
 @app.route('/deelnemers', methods=['GET'])
 def deelnemers(): return flask.jsonify(getEndpointData('deelnemers'))
 
-@app.route('/messages/<group>', methods=['GET'])
-def messages(group):
-    if not os.path.isfile(f'./messages/{group}.json'):
-        with open(f'./messages/{group}.json', 'w') as f: json.dump({"data": []}, f, indent=4)
-    with open(f'./messages/{group}.json') as f:
-        data = json.load(f)
-    with open(f'./messages/global.json') as f:
-        global_data = json.load(f)
+@app.route('/messages/<api_key>', methods=['GET'])
+def messages(api_key): return flask.jsonify({"data": db.getMessages(api_key)}), 200
 
-    data["data"] += global_data["data"]
-    data["data"] = sorted(data["data"], key=lambda x: x["datetime"])
-    return flask.jsonify(data)
+@app.route('/messages/<api_key>', methods=['POST'])
+def post_message(api_key):
+    body = json.loads(request.data)
+    print(body)
+    if not body: return flask.jsonify({"error": "No data"}), 400
+    if not 'username' in body: return flask.jsonify({"error": "No username"}), 400
+    if not 'message' in body: return flask.jsonify({"error": "No message"}), 400
+    try: db.addMessage(body['username'], api_key, body['message'])
+    except Exception as e: return flask.jsonify({"error": "Database Error"}), 500
+    return flask.jsonify({"data": db.getMessages(api_key)}), 200
 
-@app.route('/messages/<group>', methods=['POST'])
-def post_message(group):
-    data = []
-    if not os.path.isfile(f'./messages/{group}.json'):
-        with open(f'./messages/{group}.json', 'w') as f: json.dump({"data": data}, f, indent=4)
-    else:
-        with open(f'./messages/{group}.json') as f:
-            data = json.load(f)
-    body = flask.request.json
-    body["datetime"] = int(time.time())
-    data["data"].append(body)
-    with open(f'./messages/{group}.json', 'w') as f: json.dump(data, f, indent=4)
-    return flask.jsonify(data), 200
 
-@app.route('/live_locaties/<group>', methods=['GET'])
-def live_locaties(group):
-    if not os.path.isfile(f'./live_locaties/{group}.json'):
-        with open(f'./live_locaties/{group}.json', 'w') as f: json.dump({"data": []}, f, indent=4)
-    with open(f'./live_locaties/{group}.json') as f: 
-        data = json.load(f)
-
-    returnal = {"data": []}
-    for item in data["data"]:
-        dt = data["data"][item]
-        dt["username"] = item
-        returnal["data"].append(dt)
-    return flask.jsonify(returnal)
+@app.route('/live_locaties/<api_key>', methods=['GET'])
+def live_locaties(api_key): return flask.jsonify( {"data": db.getLocations(api_key)}), 200
 
 
 
@@ -100,20 +78,14 @@ def live_locatie(api_key):
     lat = body['latitude']
     long = body['longitude']
 
-    if not os.path.exists(f'./live_locaties'): os.mkdir(f'./live_locaties/')
-    if not os.path.exists(f'./live_locaties/{api_key}.json'):
-        with open(f'./live_locaties/{api_key}.json', 'w') as f: json.dump({"data": {}}, f, indent=4)
+    try: db.addLocation(username, api_key, time.time(), lat, long)
+    except Exception as e: 
+        print(e)
+        return {"error": "Database error"}, 500
 
-    with open(f'./live_locaties/{api_key}.json') as f: data = json.load(f)
-    data["data"][username] = {"datetime": time.time(), "latitude": lat, "longitude": long}
-    with open(f'./live_locaties/{api_key}.json', 'w') as f:
-        json.dump(data, f, indent=4)
     return {"message": "success"}, 200
 
 @app.route('/announcements')
-def announcements():
-    with open('announcements.json') as f: data = json.load(f)
-    return flask.jsonify(data)
-
+def announcements(): return flask.jsonify( {"data": db.getAnnouncement()}), 200
 
 app.run(host='0.0.0.0', port=20000)
