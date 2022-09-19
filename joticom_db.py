@@ -6,11 +6,24 @@ def addLocation(username, api_key, datetime, lat, long):
     db.executeQuery(query, params=[username, api_key, datetime, lat, long])
     return True
 
-def getLocations(api_key):
+def addVossenLocation(api_key, vossen_team, datetime, location_type, latitude, longitude):
+    query = "INSERT INTO vossen_locations (api_key, vossen_team, datetime, location_type, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)"
+    return db.executeQuery(query, params=[api_key, vossen_team, datetime, location_type, latitude, longitude])
+
+def getVossenLocations(api_key):
     query = """
-    SELECT username, latitude, longitude, created_at
+    SELECT vossen_team as team, datetime, location_type, latitude as lat, longitude as long
+    FROM vossen_locations
+    WHERE API_KEY LIKE ?
+    ORDER BY datetime ASC"""
+    return db.selectQuery(query, params=[api_key])
+
+def getLocations(api_key):
+    query = f"""
+    SELECT username, latitude as lat, longitude as long, created_at
     FROM live_locations l1
     WHERE API_KEY LIKE ?
+	AND created_at >= strftime('%s', 'now', '-3 hours')
     AND created_at = (
         SELECT MAX(created_at)
         FROM live_locations l2
@@ -28,7 +41,7 @@ def getMessages(api_key):
     SELECT username, message, created_at
     FROM messages m
     WHERE API_KEY LIKE ?
-    ORDER BY created_at DESC
+    ORDER BY created_at ASC
     LIMIT 50"""
     return db.selectQuery(query, params=[api_key])
 

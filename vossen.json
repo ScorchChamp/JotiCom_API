@@ -1,0 +1,53 @@
+{
+    "laatste_update": 1663610679.9686077,
+    "data": [
+        {
+            "team": "Alpha",
+            "status": "rood"
+        },
+        {
+            "team": "Bravo",
+            "status": "rood"
+        },
+        {
+            "team": "Charlie",
+            "status": "rood"
+        },
+        {
+            "team": "Delta",
+            "status": "rood"
+        },
+        {
+            "team": "Echo",
+            "status": "rood"
+        },
+        {
+            "team": "Foxtrot",
+            "status": "rood"
+        },
+        {
+            "team": "Alpha 2",
+            "status": "rood"
+        },
+        {
+            "team": "Bravo 2",
+            "status": "rood"
+        },
+        {
+            "team": "Charlie 2",
+            "status": "rood"
+        },
+        {
+            "team": "Delta 2",
+            "status": "rood"
+        },
+        {
+            "team": "Echo 2",
+            "status": "rood"
+        },
+        {
+            "team": "Foxtrot 2",
+            "status": "rood"
+        }
+    ]
+}
